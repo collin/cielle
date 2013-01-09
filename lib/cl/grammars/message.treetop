@@ -1,0 +1,171 @@
+module CL
+  grammar Message
+    include CL::Whitespace
+
+    rule method_definition
+      "method " method_name method_arguments# method_body*
+    end
+
+    # rule method_body
+    #   "\n"
+    # end
+
+    rule message
+      message_name space args:message_argument* {
+        def name
+          message_name.text_value
+        end
+
+        def arguments
+          args.elements
+        end
+
+        def argument_values
+          arguments.map(&:text_value)
+        end
+      }
+    end
+
+    rule message_arguments
+      message_argument+
+    end
+
+    rule message_argument
+      argument:( 
+        quoted_argument 
+        / 
+        splat_argument 
+        / 
+        atom 
+      ) real_space* default:default_argument_value* real_space* {
+        def text_value
+          unless default.text_value == ""
+            "#{argument.text_value}#{default.text_value}"
+          else
+            argument.text_value
+          end
+        end
+      }
+    end
+
+    rule default_argument_value
+      "=" space atom {
+        def text_value
+          atom.text_value
+        end
+      }
+      # /
+      # "=" space literal
+    end
+
+    rule message_name
+      atom
+    end
+
+    rule atom_argument
+      atom
+    end
+
+    rule quoted_argument
+      "*" atom
+    end
+
+    rule splat_argument
+      atom "..."
+    end
+
+    rule atom
+      [a-z_\-] [a-zA-Z0-9_\-]*
+    end
+
+    # rule string
+    #   double_quoted_string / single_quoted_string
+    # end
+
+    # rule double_quoted_string
+    #   '"' ('\"' / !'"' .)* '"'
+    # end
+
+    # rule single_quoted_string
+    #   "'" ("\'" / !"'" .)* "'"
+    # end
+
+    rule real_space
+      " "+
+    end
+  end
+end
+
+# grammar CL
+  # rule message
+  #   message_name message_arguments*
+  #   # message_name message_arguments* block_argument*
+  # end
+
+  # rule space
+  #   " "
+  # end
+
+  # rule atom
+  #   [a-zA-Z0-9_-]+
+  # end
+
+  # rule atom_list
+  #   (atom " "*)+
+  # end
+
+  # rule message_name
+  #   atom
+  # end
+
+  # rule message_arguments
+  #   message_argument*
+  # end
+
+  # rule message_argument
+  #   space ( atom_argument / quoted_argument / splat_argument / literal_argument )
+  # end
+
+  # rule atom_argument
+  #   atom
+  # end
+
+  # rule quoted_argument
+  #   "*" atom
+  # end
+
+  # rule splat_argument
+  #   atom "..."
+  # end
+
+  # rule literal_argument
+  #   literal
+  # end
+
+  # # rule block_argument
+  # # end
+
+  # rule literal
+  #   string / integer / float
+  # end
+
+  # rule string
+  #   double_quoted_string / single_quoted_string
+  # end
+
+  # rule double_quoted_string
+  #   '"' ('\"' / !'"' .)* '"'
+  # end
+
+  # rule single_quoted_string
+  #   "'" ("\'" / !"'" .)* "'"
+  # end
+
+  # rule integer
+  #   [0-9]+
+  # end
+
+  # rule float
+  #   [0-9]+ "." [0-9]+
+  # end
+# end

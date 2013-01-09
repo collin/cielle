@@ -1,0 +1,19 @@
+module CL
+  grammar Program
+    include CL::Whitespace
+    include CL::Message
+
+    rule expressions
+      expression*
+    end
+
+    rule expression
+      block / (newline space message)
+    end
+
+    rule block
+      space "{" expressions newline space "}"
+    end
+
+  end
+end

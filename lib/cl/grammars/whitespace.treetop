@@ -1,0 +1,11 @@
+module CL
+  grammar Whitespace
+    rule space
+      " "*
+    end
+
+    rule newline
+      "\n"*
+    end
+  end
+end
