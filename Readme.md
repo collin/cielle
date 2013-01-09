@@ -2,7 +2,7 @@
 
 ##### Because, why not stay up all night and write a programming language named after your mom.
 
-`Cielle` is long for `C, L`, which is short for `Cindy Leaver`.
+`Cielle` is long for `C L`, which is short for `Cindy Leaver`.
 
 The file extension for `Cielle` is `.cl`
 
